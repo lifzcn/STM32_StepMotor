@@ -24,7 +24,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "stepmotor.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -66,7 +66,8 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	uint8_t rxBuffer[1];
+	uint8_t charCmd;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -97,6 +98,21 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+		HAL_UART_Receive_DMA(&huart1, rxBuffer, 1);
+		charCmd = rxBuffer[0];
+		
+		if (charCmd == '1')
+		{
+			StepMotor_Start(360 * 3, 1);
+			StepMotor_Stop();
+		}
+		else if (charCmd == '2')
+		{
+			StepMotor_Start(360 * 3, 0);
+			StepMotor_Stop();
+		}
+		
+		rxBuffer[0] = '0';
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
